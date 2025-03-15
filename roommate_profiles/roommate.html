@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roommate Profiles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="roommate.css">
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">ALU Nest</div>
+      <nav class="nav-links">
+        <a href="../Homepage/index.html" class="active">About Us</a>
+        <a href="../house_listings/house.html">House Listings</a>
+        <a href="roommate.html">Roommate Profiles</a>
+      </nav>
+    </header>
+
+  <main>
+    <!-- Search and Filter Section -->
+    <section class="filters">
+      <h2>Find a Roommate</h2>
+      <form id="search-form">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender">
+          <option value="">Any</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+
+        <label for="looking-for">Looking for:</label>
+        <select id="looking-for" name="looking-for">
+          <option value="">Any</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="No preference">No preference</option>
+        </select>
+
+        <label for="budget">Budget Range (RWF):</label>
+        <input type="number" id="min-budget" placeholder="Min" name="min-budget">
+        <input type="number" id="max-budget" placeholder="Max" name="max-budget">
+
+        <label for="personality">Personality:</label>
+        <select id="personality" name="personality">
+          <option value="">Any</option>
+          <option value="Introvert">Introvert</option>
+          <option value="Extrovert">Extrovert</option>
+          <option value="Ambivert">Ambivert</option>
+        </select>
+
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <!-- Profiles Section -->
+    <section class="profiles">
+      <div id="profiles-list" class="profiles-grid">
+        <!-- Profiles will be dynamically inserted here -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Image Modal -->
+  <div id="image-modal" class="modal">
+    <span class="close">&times;</span>
+    <img id="modal-image" class="modal-content">
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 ALU Nest by Team 11. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="roommate.js"></script>
+</body>
+</html>
