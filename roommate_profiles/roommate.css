@@ -21,7 +21,7 @@ body {
   line-height: 1.6;
 }
 
-/* Header Styles */
+
 .header {
   background-color: var(--dark-color);
   padding: 15px 20px;
@@ -109,17 +109,17 @@ body {
 }
 
 .filters button:hover {
-  background-color: ##FF6B6B;
+  background-color: #FF6B6B;
 }
 
-/* Profiles Section */
+
 .profiles {
   margin-top: 2rem;
 }
 
 .profiles-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 1.5rem;
 }
 
@@ -175,7 +175,7 @@ body {
   background-color: #FF6B6B;
 }
 
-/* Modal Styles */
+
 .modal {
   display: none;
   position: fixed;
@@ -210,7 +210,7 @@ body {
   color: #ccc;
 }
 
-/* Footer Styles */
+
 .footer {
   background-color: var(--dark-color);
   color: var(--light-color);
@@ -243,16 +243,16 @@ body {
   color: var(--secondary-color);
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .profiles-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    grid-template-columns: repeat(2, 1fr); 
   }
 }
 
 @media (max-width: 480px) {
   .profiles-grid {
-    grid-template-columns: 1fr; /* 1 column on mobile */
+    grid-template-columns: 1fr; 
   }
 
   .filters form {

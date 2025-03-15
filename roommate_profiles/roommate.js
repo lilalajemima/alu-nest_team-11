@@ -1,4 +1,4 @@
-// Fetch profiles from the JSON file
+
 async function fetchProfiles() {
     const response = await fetch('./profiles.json');
     const profiles = await response.json();
@@ -27,7 +27,7 @@ async function fetchProfiles() {
       profilesList.appendChild(profileCard);
     });
   
-    // Add click event to profile images
+
     const images = document.querySelectorAll('.profile-image');
     images.forEach(image => {
       image.addEventListener('click', () => {
@@ -39,14 +39,14 @@ async function fetchProfiles() {
     });
   }
 
- // Close modal when clicking the X button
+
 const closeButton = document.querySelector('.close');
 closeButton.addEventListener('click', () => {
   const modal = document.getElementById('image-modal');
   modal.style.display = 'none';
 });
 
-// Close modal when clicking outside the image
+
 window.addEventListener('click', (event) => {
   const modal = document.getElementById('image-modal');
   if (event.target === modal) {
@@ -54,15 +54,15 @@ window.addEventListener('click', (event) => {
   }
 });
 
-  // Filter profiles based on search criteria
+
   function filterProfiles(profiles, filters) {
     return profiles.filter(profile => {
-      // Gender filter
+  
       if (filters.gender && profile.lookingFor !== filters.gender) {
         return false;
       }
   
-      // Budget filter
+
       if (filters.minBudget && profile.budgetRange.max < filters.minBudget) {
         return false;
       }
@@ -70,7 +70,7 @@ window.addEventListener('click', (event) => {
         return false;
       }
   
-      // Personality filter
+
       if (filters.personality && profile.personalityTrait !== filters.personality) {
         return false;
       }
@@ -79,7 +79,7 @@ window.addEventListener('click', (event) => {
     });
   }
   
-  // Handle search form submission
+
   async function handleSearch(event) {
     event.preventDefault();
   
@@ -100,10 +100,10 @@ window.addEventListener('click', (event) => {
     displayProfiles(filteredProfiles);
   }
   
-  // Add event listener to the search form
+
   document.getElementById('search-form').addEventListener('submit', handleSearch);
   
-  // Fetch and display profiles when the page loads
+
   window.onload = async () => {
     const profiles = await fetchProfiles();
     displayProfiles(profiles);
