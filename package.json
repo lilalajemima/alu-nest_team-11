@@ -1,6 +1,19 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "mongodb": "^6.14.2",
     "mongoose": "^8.12.1"
-  }
+  },
+  "name": "alu-nest_team-11",
+  "description": "<script>\r         // Sample database of properties\r     const propertiesData = [\r     {\r         id: \"1\",\r         houseImg: {\r             Outdoor: [\r                 \"home/House 1/OutdoorView.jpg\",\r                 \"home/House 1/OutdoorView1.jpg\"\r             ],\r             LivingRoom: [\r                 \"home/House 1/LivingRoom.jpg\"\r             ],\r             Kitchen: [\r                 \"home/House 1/Kitchen.jpg\"\r             ],\r             Bedroom: [\r                 \"home/House 1/Bedroom1.jpg\"\r             ],\r             Bathroom: [\r                 \"home/House 1/Bathroom1.jpg\"\r             ]\r         },\r         house_overview: {\r             house_name: '5-Bedroom House For Rent In Kanombe',\r             house_price: 180000,\r             status: 'Available',\r             bedrooms: 5,\r             bathrooms: 4,\r             distance: 20,\r             property_type: 'House',\r             advert_type: \"Partnered\",\r         }\r     },\r     {\r         id: \"2\",\r         houseImg: {\r             Outdoor: [\r                 \"home/House 2/OutdoorView.jpg\",\r                 \"home/House 2/OutdoorView1.jpg\"\r             ],\r             LivingRoom: [\r                 \"home/House 2/LivingRoom.jpg\"\r             ],\r             Kitchen: [\r                 \"home/House 2/Kitchen.jpg\"\r             ],\r             Bedroom: [\r                 \"home/House 2/Bedroom1.jpg\"\r             ],\r             Bathroom: [\r                 \"home/House 2/Bathroom1.jpg\"\r             ]\r         },\r         house_overview: {\r             house_name: '3-Bedroom Apartment Near University',\r             house_price: 120000,\r             status: 'Available',\r             bedrooms: 3,\r             bathrooms: 2,\r             distance: 5,\r             property_type: 'Apartment',\r             advert_type: \"Standard\",\r         }\r     },\r     {\r         id: \"3\",\r         houseImg: {\r             Outdoor: [\r                 \"home/House 3/OutdoorView.jpg\",\r                 \"home/House 3/OutdoorView1.jpg\"\r             ],\r             LivingRoom: [\r                 \"home/House 3/LivingRoom.jpg\"\r             ],\r             Kitchen: [\r                 \"home/House 3/Kitchen.jpg\"\r             ],\r             Bedroom: [\r                 \"home/House 3/Bedroom1.jpg\"\r             ],\r             Bathroom: [\r                 \"home/House 3/Bathroom1.jpg\"\r             ]\r         },\r         house_overview: {\r             house_name: 'Studio Apartment in University District',\r             house_price: 85000,\r             status: 'Reserved',\r             bedrooms: 1,\r             bathrooms: 1,\r             distance: 2,\r             property_type: 'Studio',\r             advert_type: \"Featured\",\r         }\r     }\r ];",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

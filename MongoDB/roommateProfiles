@@ -1,6 +1,0 @@
-db.roommateProfiles.insertOne({
-  name: "Emma",
-  preferredLocation: "Kigali",
-  budget: 200,
-  preferredAmenities: ["WiFi", "Air Conditioning"]
-})
