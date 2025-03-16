@@ -1,0 +1,7 @@
+db.houseListings.insertOne({
+  title: "3 Bedroom Apartment",
+  location: "Kigali",
+  price: 500,
+  available: true,
+  amenities: ["WiFi", "Parking"]
+})
