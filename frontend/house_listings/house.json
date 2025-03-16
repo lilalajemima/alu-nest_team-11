@@ -1,0 +1,39 @@
+{
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "rent_per_room_rwf": 120000,
+    "num_bedrooms": 2,
+    "num_bathrooms": 1,
+    "furnished": true,
+    "electricity_included": true,
+    "security_guard": false,
+    "water_included": true,
+    "wifi_included": false,
+    "washing_machine": false,
+    "location": "Kwa Nayinzira Sekimondo",
+    "description": "A cozy 2-bedroom house in Kwa Nayinzira Sekimondo, perfect for students. Close to public transport and local markets.",
+    "images": [
+      "house2-image1.jpg",
+      "house2-image2.jpg",
+      "house2-image3.jpg"
+    ]
+  }
+
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "rent_per_room_rwf": 200000,
+    "num_bedrooms": 4,
+    "num_bathrooms": 3,
+    "furnished": false,
+    "electricity_included": true,
+    "security_guard": true,
+    "water_included": true,
+    "wifi_included": true,
+    "washing_machine": true,
+    "location": "Zindiro",
+    "description": "A spacious 4-bedroom house in Zindiro, ideal for a group of students. Features modern amenities and a quiet neighborhood.",
+    "images": [
+      "house3-image1.jpg",
+      "house3-image2.jpg",
+      "house3-image3.jpg"
+    ]
+  }
