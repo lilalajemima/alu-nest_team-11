@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="house.css">
 </head>
 <body>
-  <!-- Header -->
+ 
   <header class="header">
     <div class="logo">ALU Nest</div>
     <nav class="nav-links">
@@ -21,9 +21,9 @@
     </nav>
   </header>
 
-  <!-- Search Bar -->
+  <!-- The search bar -->
   <form id="housingSearchForm" class="search-bar">
-    <!-- Rent Range -->
+  
     <div class="filter-group">
       <label for="minRent">Min. Rent (RWF):</label>
       <input type="number" id="minRent" name="minRent" placeholder="Min. Rent">
@@ -31,7 +31,7 @@
       <input type="number" id="maxRent" name="maxRent" placeholder="Max. Rent">
     </div>
 
-    <!-- Bedrooms -->
+    
     <div class="filter-group">
       <label for="bedrooms">Bedrooms:</label>
       <select id="bedrooms" name="bedrooms">
@@ -43,7 +43,7 @@
       </select>
     </div>
 
-    <!-- Location -->
+    
     <div class="filter-group">
       <label for="location">Location:</label>
       <select id="location" name="location">
@@ -55,7 +55,7 @@
       </select>
     </div>
 
-    <!-- Amenities -->
+  
     <div class="filter-group">
       <label>Amenities:</label>
       <div class="amenities-checkboxes">
@@ -68,15 +68,13 @@
       </div>
     </div>
 
-    <!-- Search Button -->
+    
     <button type="submit" class="search-btn">Search</button>
   </form>
 
-  <!-- House Listings -->
+  <!-- Dummy Data -->
   <div id="listings" class="listings">
-    <!-- Listing 1 -->
     <div class="listing" data-rent="200000" data-bedrooms="2" data-location="Kwa Nayinzira Sekimondo" data-furnished="true" data-electricity="true" data-security="true" data-water="true" data-wifi="true" data-washingMachine="false">
-      <!-- Image Carousel -->
       <div class="image-carousel">
         <div class="carousel-images">
           <img src="https://via.placeholder.com/300x200?text=Image+1" alt="House 1 Image 1" class="carousel-image">
@@ -91,14 +89,13 @@
         <p><strong>Rent:</strong> RWF 200,000</p>
         <p><strong>Bedrooms:</strong> 2</p>
         <p><strong>Amenities:</strong> Furnished, Electricity, Security, Water, Wi-Fi</p>
-        <!-- Contact Button -->
-        <button class="contact-btn" data-email="landlord1@example.com" data-whatsapp="1234567890">Contact Landlord</button>
+        <button class="contact-btn" data-email="landlord1@example.com" data-whatsapp="1234567890">Reach out</button>
       </div>
     </div>
 
-    <!-- Listing 2 -->
+  
     <div class="listing" data-rent="150000" data-bedrooms="1" data-location="Kwa Mushimire" data-furnished="false" data-electricity="true" data-security="false" data-water="true" data-wifi="false" data-washingMachine="false">
-      <!-- Image Carousel -->
+    
       <div class="image-carousel">
         <div class="carousel-images">
           <img src="https://via.placeholder.com/300x200?text=Image+1" alt="House 2 Image 1" class="carousel-image">
@@ -112,14 +109,14 @@
         <p><strong>Rent:</strong> RWF 150,000</p>
         <p><strong>Bedrooms:</strong> 1</p>
         <p><strong>Amenities:</strong> Electricity, Water</p>
-        <!-- Contact Button -->
-        <button class="contact-btn" data-whatsapp="9876543210">Contact Landlord</button>
+        
+        <button class="contact-btn" data-whatsapp="9876543210">Reach Out</button>
       </div>
     </div>
 
-    <!-- Listing 3 -->
+  
     <div class="listing" data-rent="300000" data-bedrooms="3" data-location="Kimironko" data-furnished="true" data-electricity="true" data-security="true" data-water="true" data-wifi="true" data-washingMachine="true">
-      <!-- Image Carousel -->
+    
       <div class="image-carousel">
         <div class="carousel-images">
           <img src="https://via.placeholder.com/300x200?text=Image+1" alt="House 3 Image 1" class="carousel-image">
@@ -135,8 +132,8 @@
         <p><strong>Rent:</strong> RWF 300,000</p>
         <p><strong>Bedrooms:</strong> 3</p>
         <p><strong>Amenities:</strong> Furnished, Electricity, Security, Water, Wi-Fi, Washing Machine</p>
-        <!-- Contact Button -->
-        <button class="contact-btn" data-email="landlord3@example.com">Contact Landlord</button>
+      
+        <button class="contact-btn" data-email="landlord3@example.com">Reach Out</button>
       </div>
     </div>
   </div>
