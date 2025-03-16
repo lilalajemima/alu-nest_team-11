@@ -1,4 +1,4 @@
-{
+[{
     "id": "550e8400-e29b-41d4-a716-446655440001",
     "rent_per_room_rwf": 120000,
     "num_bedrooms": 2,
@@ -16,8 +16,7 @@
       "house2-image2.jpg",
       "house2-image3.jpg"
     ]
-  }
-
+  },
   {
     "id": "550e8400-e29b-41d4-a716-446655440002",
     "rent_per_room_rwf": 200000,
@@ -37,3 +36,4 @@
       "house3-image3.jpg"
     ]
   }
+]
