@@ -16,8 +16,7 @@ app.get("/", (req, res) => {
     res.send("Backend is running");
 });
 
-// Test route to verify database connection
-app.get("/test", (req, res) => {
+app.get("/housingDB", (req, res) => {
     mongoose.connection.db.listCollections()
         .toArray((err, collections) => {
             if (err) {
