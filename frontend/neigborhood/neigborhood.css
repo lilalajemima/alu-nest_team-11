@@ -1,0 +1,315 @@
+/* General Styles */
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #CE1126;
+    --accent-color: #ff6b6b;
+    --dark-color: #002D72;
+    --light-color: #ffffff;
+    --text-color: #333333;
+    --background-color: #f9f9f9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Outfit", sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 0;
+}
+
+/* Header Styles */
+.header {
+    width: 100%;
+    background-color: var(--dark-color);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.logo {
+    font-family: "Gochi Hand", cursive;
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--light-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: var(--light-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--secondary-color);
+}
+
+/* Hamburger Menu Styles */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 10px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: var(--light-color);
+    transition: all 0.3s ease;
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+        z-index: 100;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--dark-color);
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        display: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    /* Hamburger Animation */
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+}
+
+/* Main Content Container */
+.container {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Form Styles */
+.selectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background: #CE1126;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #ff6b6b;
+}
+
+/* Comparison Results */
+.comparison-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+    padding: 20px;
+}
+
+.neighborhood-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0984e3;
+}
+
+.details p {
+    margin: 1rem 0;
+    color: #555;
+}
+
+/* Status Messages */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #0984e3;
+    font-size: 1.2rem;
+}
+
+.error {
+    text-align: center;
+    padding: 1.5rem;
+    background: #ffe6e6;
+    color: #ff4444;
+    border: 2px solid #ff4444;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+/* Housing Info Section */
+.housing-info-section {
+    margin: 2rem 0;
+    padding: 20px;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.housing-info-section h2 {
+    color: var(--dark-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+}
+
+.info-bullets {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.info-bullets li {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.info-bullets li:hover {
+    transform: translateX(10px);
+}
+
+.bullet-title {
+    font-weight: 600;
+    color: var(--text-color);
+    flex: 1;
+}
+
+.download-link {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.download-link:hover {
+    background-color: var(--secondary-color);
+}
+
+.download-link::after {
+    content: '⬇';
+    margin-left: 0.5rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .info-bullets li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .download-link {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Footer Styles */
+.footer {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    padding: 20px;
+    text-align: center;
+    margin-top: auto;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .selectors {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 50px auto;
+    }
+
+    .vs-divider {
+        transform: rotate(90deg);
+    }
+}

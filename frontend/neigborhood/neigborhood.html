@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Housing Listings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="neigborhood.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">ALU Nest</div>
+    <nav class="nav-links">
+      <a href="../Homepage/index.html" class="active">About Us</a>
+      <a href="../house_listings/house.html">House Listings</a>
+      <a href="../roommate_profiles/roommate.html">Roommate Profiles</a>
+      <a href="../neighborhood/neighborhood.html">Neighborhood</a> 
+      <a href="../login/login.html">Login</a>
+    </nav>
+    <button class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+</header>
+
+<body>
+    <main class="container">
+        <h1>Compare Neigborhood</h1>
+        
+        <!-- Comparison Form -->
+        <form id="compare-form">
+            <div class="selectors">
+                <select id="neighborhood1">
+                    <option value="">Select First Neighborhood</option>
+                </select>
+                <select id="neighborhood2">
+                    <option value="">Select Second Neighborhood</option>
+                </select>
+            </div>
+            <button type="submit">Compare Neighborhoods</button>
+        </form>
+
+        <!-- Comparison Results Section -->
+        <div id="comparison-section">
+            <!-- Results will be inserted here by JavaScript -->
+        </div>
+
+        <!-- Templates -->
+        <template id="loading-template">
+            <div class="loading">Loading comparison...</div>
+        </template>
+        <template id="error-template">
+            <div class="error">Error loading data</div>
+        </template>
+
+        <div class="housing-info-section">
+          <h1>More Housing Information</h1>
+          <ul class="info-bullets">
+              <li>
+                  <span class="bullet-title">Sample Questions You Should Ask Before Moving Out</span>
+                  <a href="/path/to/zoning.pdf" class="download-link" download>Download PDF</a>
+              </li>
+              <li>
+                  <span class="bullet-title">Housing Development Plans 2023</span>
+                  <a href="/path/to/development-plans.pdf" class="download-link" download>Download PDF</a>
+              </li>
+              <li>
+                  <span class="bullet-title">Affordable Housing Programs</span>
+                  <a href="/path/to/affordable-housing.pdf" class="download-link" download>Download PDF</a>
+              </li>
+          </ul>
+      </div>
+    </main>
+
+    <script src="neigborhood.js"></script>
+
+</body>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 ALU Nest by Team 11. All rights reserved.</p>
+    </div>
+  </footer>
+</html>
