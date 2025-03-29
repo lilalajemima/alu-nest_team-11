@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALU Nest</title>
+    <!-- Optimized Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <a href="/" class="logo">ALU Nest</a>
+        <nav class="nav-links">
+            {% if session.logged_in %}
+            <a href="/about" {% if request.path=='/about' %}class="active" {% endif %}>About Us</a>
+            <a href="/dashboard" {% if request.path=='/dashboard' %}class="active" {% endif %}>Dashboard</a>
+            <a href="{{ url_for('view_listings') }}" {% if request.path=='/listings' %}class="active" {% endif %}>View Listings</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('roommate_profiles') }}">Roommate Profiles</a>
+            </li>
+            <a href="{{ url_for('neighborhood') }}" class="{% if request.endpoint == 'neighborhood' %}active{% endif %}">Neighborhood</a>
+            <a href="/user/signout">Logout</a>
+            {% else %}
+            <a href="/" {% if request.path=='/' %}class="active" {% endif %}>Home</a>
+            <a href="/about" {% if request.path=='/about' %}class="active" {% endif %}>About Us</a>
+            lass="{% if request.endpoint == 'neighborhood_info' %}active{% endif %}">Neighborhood</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 ALU Nest by Team 11. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="neighborhood-container">
+    <h1>Compare Neighborhoods</h1>
+    
+    <!-- Comparison Form -->
+    <form id="compare-form">
+        <div class="selectors">
+            <select id="neighborhood1">
+                <option value="">Select First Neighborhood</option>
+                {% for neighborhood in neighborhoods %}
+                <option value="{{ neighborhood }}">{{ neighborhood }}</option>
+                {% endfor %}
+            </select>
+            <select id="neighborhood2">
+                <option value="">Select Second Neighborhood</option>
+                {% for neighborhood in neighborhoods %}
+                <option value="{{ neighborhood }}">{{ neighborhood }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Compare Neighborhoods</button>
+    </form>
+
+    <!-- Comparison Results Section -->
+    <div id="comparison-section">
+        <!-- Results will be inserted here by JavaScript -->
+    </div>
+
+    <!-- Housing Info Section -->
+    <div class="housing-info-section">
+        <h1>More Housing Information</h1>
+        <ul class="info-bullets">
+            <li>
+                <span class="bullet-title">Sample Questions You Should Ask Before Moving Out</span>
+                <a href="#" class="download-link" download>Download PDF</a>
+            </li>
+            <li>
+                <span class="bullet-title">Housing Development Plans 2023</span>
+                <a href="#" class="download-link" download>Download PDF</a>
+            </li>
+            <li>
+                <span class="bullet-title">Affordable Housing Programs</span>
+                <a href="#" class="download-link" download>Download PDF</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<style>
+/* Neighborhood Comparison Styles */
+.neighborhood-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.selectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    color: #333;
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background: #CE1126;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background: #ff6b6b;
+}
+
+.comparison-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+    padding: 20px;
+}
+
+.neighborhood-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0984e3;
+}
+
+.details p {
+    margin: 1rem 0;
+    color: #555;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #0984e3;
+    font-size: 1.2rem;
+}
+
+.error {
+    text-align: center;
+    padding: 1.5rem;
+    background: #ffe6e6;
+    color: #ff4444;
+    border: 2px solid #ff4444;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.housing-info-section {
+    margin: 2rem 0;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.housing-info-section h1 {
+    color: #002D72;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 0.5rem;
+}
+
+.info-bullets {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.info-bullets li {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.info-bullets li:hover {
+    transform: translateX(10px);
+}
+
+.bullet-title {
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+}
+
+.download-link {
+    background-color: #4a6fa5;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.download-link:hover {
+    background-color: #CE1126;
+}
+
+.download-link::after {
+    content: '⬇';
+    margin-left: 0.5rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .selectors {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 50px auto;
+    }
+
+    .vs-divider {
+        transform: rotate(90deg);
+    }
+
+    .info-bullets li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .download-link {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
+<script>
+// Wait until all HTML is parsed
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Neighborhood comparison loaded!');
+    
+    // Get the form element
+    const compareForm = document.getElementById('compare-form');
+    
+    // Verify form exists
+    if (!compareForm) {
+        console.error('Compare form not found!');
+        return;
+    }
+    
+    // Form submission handler
+    compareForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        console.log('Form submitted');
+        
+        // Get selected values
+        const neighborhood1 = document.getElementById('neighborhood1').value;
+        const neighborhood2 = document.getElementById('neighborhood2').value;
+        
+        // Validate selection
+        if (!neighborhood1 || !neighborhood2) {
+            alert('Please select two neighborhoods to compare');
+            return;
+        }
+        
+        // Show loading state
+        const comparisonSection = document.getElementById('comparison-section');
+        comparisonSection.innerHTML = '<div class="loading">Loading comparison data...</div>';
+        
+        try {
+            // Fetch comparison data
+            const response = await fetch('/api/compare-neighborhoods', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name1: neighborhood1,
+                    name2: neighborhood2
+                })
+            });
+            
+            // Check for errors
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Display results
+            displayComparison(data.neighborhood1, data.neighborhood2);
+            
+        } catch (error) {
+            console.error('Comparison error:', error);
+            comparisonSection.innerHTML = `
+                <div class="error">
+                    Error: ${error.message || 'Failed to load comparison data'}
+                </div>
+            `;
+        }
+    });
+    
+    // Function to display comparison results
+    function displayComparison(n1, n2) {
+        const section = document.getElementById('comparison-section');
+        
+        section.innerHTML = `
+            <div class="comparison-container">
+                <div class="neighborhood-card">
+                    <h2>${n1.name}</h2>
+                    <div class="details">
+                        <p><strong>🚶 Walk:</strong> ${n1.commute.byFoot.time} (${n1.commute.byFoot.distance})</p>
+                        <p><strong>🚴 Bike:</strong> ${n1.commute.byBike.time} (${n1.commute.byBike.distance})</p>
+                        <p><strong>👮 Police Station:</strong> ${n1.safety.policeStation}</p>
+                        <p><strong>💊 Pharmacies:</strong> ${n1.pharmacies.description}</p>
+                        <p><strong>🏥 Health:</strong> ${n1.healthFacilities.description}</p>
+                    </div>
+                </div>
+                
+                <div class="vs-divider">VS</div>
+                
+                <div class="neighborhood-card">
+                    <h2>${n2.name}</h2>
+                    <div class="details">
+                        <p><strong>🚶 Walk:</strong> ${n2.commute.byFoot.time} (${n2.commute.byFoot.distance})</p>
+                        <p><strong>🚴 Bike:</strong> ${n2.commute.byBike.time} (${n2.commute.byBike.distance})</p>
+                        <p><strong>👮 Police Station:</strong> ${n2.safety.policeStation}</p>
+                        <p><strong>💊 Pharmacies:</strong> ${n2.pharmacies.description}</p>
+                        <p><strong>🏥 Health:</strong> ${n2.healthFacilities.description}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+});
+</script>
+{% endblock %}

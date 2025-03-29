@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="roommate-profiles-container">
+    <section class="filters">
+        <h2>Find a Roommate</h2>
+        <form id="search-form" method="GET" action="{{ url_for('roommate_profiles') }}">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="">Any</option>
+                <option value="Male" {% if request.args.get('gender')=='Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if request.args.get('gender')=='Female' %}selected{% endif %}>Female</option>
+            </select>
+
+            <label for="looking-for">Looking for:</label>
+            <select id="looking-for" name="looking_for">
+                <option value="">Any</option>
+                <option value="Male" {% if request.args.get('looking_for')=='Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if request.args.get('looking_for')=='Female' %}selected{% endif %}>Female
+                </option>
+                <option value="No preference" {% if request.args.get('looking_for')=='No preference' %}selected{% endif
+                    %}>No preference</option>
+            </select>
+
+            <label for="budget">Budget Range (RWF):</label>
+            <input type="number" id="min-budget" placeholder="Min" name="min_budget"
+                value="{{ request.args.get('min_budget', '') }}">
+            <input type="number" id="max-budget" placeholder="Max" name="max_budget"
+                value="{{ request.args.get('max_budget', '') }}">
+
+            <label for="personality">Personality:</label>
+            <select id="personality" name="personality">
+                <option value="">Any</option>
+                <option value="Introvert" {% if request.args.get('personality')=='Introvert' %}selected{% endif %}>
+                    Introvert</option>
+                <option value="Extrovert" {% if request.args.get('personality')=='Extrovert' %}selected{% endif %}>
+                    Extrovert</option>
+                <option value="Ambivert" {% if request.args.get('personality')=='Ambivert' %}selected{% endif %}>
+                    Ambivert</option>
+            </select>
+
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <section class="profiles">
+        <div id="profiles-list" class="profiles-grid">
+            {% for profile in profiles %}
+            <div class="profile-card">
+                {% if profile.profilePicture %}
+                <img src="{{ url_for('static', filename='uploads/profile_pictures/' + profile.profilePicture) }}"
+                    alt="Profile Picture" class="profile-image">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default-profile.png') }}" alt="Default Profile"
+                    class="profile-image">
+                {% endif %}
+                <h3>{{ profile.name }}</h3>
+                <p><strong>Gender:</strong> {{ profile.gender }}</p>
+                <p><strong>Looking for:</strong> {{ profile.lookingFor }}</p>
+                <p><strong>Budget:</strong> RWF {{ profile.budgetRange.min }} - {{ profile.budgetRange.max }}</p>
+                <p><strong>Personality:</strong> {{ profile.personalityTrait }}</p>
+                <p>{{ profile.description }}</p>
+                <a href="mailto:{{ profile.user_email }}?subject=Roommate%20Inquiry%20(ALU%20Nest)&body=Hi%20{{ profile.name|urlencode }}%2C%0A%0AI%20saw%20your%20profile%20on%20ALU%20Nest%20and%20wanted%20to%20connect%21%0A%0AMy%20name%3A%20{{ current_user.name|urlencode }}%0AMy%20email%3A%20{{ current_user.email|urlencode }}%0A%0ALet%27s%20chat%21"
+                    class="contact-button">
+                    Contact Me
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<style>
+    /* Add all the CSS from your original roommate.css here */
+
+    :root {
+        --primary-color: #4a6fa5;
+        --secondary-color: #CE1126;
+        --accent-color: #ff6b6b;
+        --dark-color: #002D72;
+        --light-color: #ffffff;
+        --text-color: #333333;
+        --background-color: #f9f9f9;
+    }
+
+    * ⁠ {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Outfit", sans-serif;
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+
+    .header {
+        background-color: var(--dark-color);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        font-family: "Gochi Hand", cursive;
+        font-size: 28px;
+        font-weight: bold;
+        color: var(--light-color);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 20px;
+    }
+
+    .nav-links a {
+        color: var(--light-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: var(--secondary-color);
+    }
+
+
+    .filters {
+        margin-bottom: 2rem;
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .filters h2 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        color: #002D72;
+    }
+
+    .filters form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .filters label {
+        font-weight: bold;
+        color: #002D72;
+    }
+
+    .filters input,
+    .filters select,
+    .filters button {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .filters input {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .filters select {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .filters button {
+        background-color: #CE1126;
+        color: #fff;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .filters button:hover {
+        background-color: #FF6B6B;
+    }
+
+
+    .profiles {
+        margin-top: 2rem;
+    }
+
+    .profiles-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+
+    .profile-card {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        cursor: pointer;
+        object-fit: cover;
+        border: 3px solid #333;
+    }
+
+    .profile-card h3 {
+        margin: 0.5rem 0;
+        font-size: 1.25rem;
+        color: #002D72;
+    }
+
+    .profile-card p {
+        margin: 0.25rem 0;
+        color: #555;
+        font-size: 0.9rem;
+    }
+
+    .contact-button {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #4A6FA5;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #FF6B6B;
+    }
+
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        text-align: center;
+    }
+
+    .modal-content {
+        max-width: 90%;
+        max-height: 90%;
+        margin-top: 5%;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .close {
+        position: absolute;
+        top: 1rem;
+        right: 2rem;
+        color: #fff;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .close:hover {
+        color: #ccc;
+    }
+
+
+    .footer {
+        background-color: var(--dark-color);
+        color: var(--light-color);
+        padding: 20px;
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .footer-content {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer-links {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+
+    .footer-links a {
+        color: var(--light-color);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+        color: var(--secondary-color);
+    }
+
+
+    @media (max-width: 768px) {
+        .profiles-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profiles-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filters form {
+            flex-direction: column;
+        }
+
+        .filters input,
+        .filters select,
+        .filters button {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
