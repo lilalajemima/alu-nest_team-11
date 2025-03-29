@@ -233,4 +233,4 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.boxShadow = '';
         });
     });
-});}
+});})
