@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="listing-detail-container">
+    <a href="{{ url_for('view_listings') }}" class="back-link">&larr; Back to Listings</a>
+    
+    <div class="listing-header">
+        <h1>{{ listing.location }}</h1>
+        <div class="price">{{ "{:,}".format(listing.rent_per_room_rwf) }} RWF per room</div>
+    </div>
+    
+    <div class="listing-content">
+        <div class="listing-gallery">
+            {% if listing.images and listing.images|length > 0 %}
+                <div class="main-image">
+                    <img src="{{ url_for('static', filename='uploads/house_images/' + listing.images[0]) }}" 
+                         alt="House Image" id="mainImage">
+                </div>
+                {% if listing.images|length > 1 %}
+                <div class="thumbnail-container">
+                    {% for image in listing.images %}
+                    <div class="thumbnail">
+                        <img src="{{ url_for('static', filename='uploads/house_images/' + image) }}" 
+                             alt="House Image" onclick="changeMainImage(this)">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="main-image">
+                    <img src="{{ url_for('static', filename='images/house_placeholder.jpg') }}" alt="House Image">
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="listing-info">
+            <div class="specs">
+                <div class="spec-item">
+                    <i class="fas fa-bed"></i>
+                    <span>{{ listing.num_bedrooms }} Bedroom{% if listing.num_bedrooms > 1 %}s{% endif %}</span>
+                </div>
+                <div class="spec-item">
+                    <i class="fas fa-bath"></i>
+                    <span>{{ listing.num_bathrooms }} Bathroom{% if listing.num_bathrooms > 1 %}s{% endif %}</span>
+                </div>
+            </div>
+            
+            <div class="amenities">
+                <h3>Amenities</h3>
+                <ul>
+                    <li {% if not listing.furnished %}class="unavailable"{% endif %}>
+                        <i class="fas fa-couch"></i> Furnished
+                    </li>
+                    <li {% if not listing.electricity_included %}class="unavailable"{% endif %}>
+                        <i class="fas fa-bolt"></i> Electricity Included
+                    </li>
+                    <li {% if not listing.water_included %}class="unavailable"{% endif %}>
+                        <i class="fas fa-tint"></i> Water Included
+                    </li>
+                    <li {% if not listing.wifi_included %}class="unavailable"{% endif %}>
+                        <i class="fas fa-wifi"></i> WiFi Included
+                    </li>
+                    <li {% if not listing.security_guard %}class="unavailable"{% endif %}>
+                        <i class="fas fa-shield-alt"></i> Security Guard
+                    </li>
+                    <li {% if not listing.washing_machine %}class="unavailable"{% endif %}>
+                        <i class="fas fa-tshirt"></i> Washing Machine
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="description">
+                <h3>Description</h3>
+                <p>{{ listing.description }}</p>
+            </div>
+            
+            <div class="contact-section">
+                <button onclick="contactOwner('{{ listing.user_email }}', '{{ listing.location }}')" 
+                        class="contact-btn">
+                    <i class="fas fa-envelope"></i> Contact Owner
+                </button>
+                <p class="contact-note">This will open your email client to send a message to the listing owner.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeMainImage(thumbnail) {
+        document.getElementById('mainImage').src = thumbnail.src;
+    }
+    
+    function contactOwner(email, location) {
+        const subject = Regarding your house listing in ${location};
+        const mailtoLink = mailto:${email}?subject=${encodeURIComponent(subject)};
+        window.location.href = mailtoLink;
+    }
+</script>
+
+<style>
+    .listing-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #007bff;
+        text-decoration: none;
+        font-size: 16px;
+    }
+    
+    .back-link:hover {
+        text-decoration: underline;
+    }
+    
+    .listing-header {
+        margin-bottom: 30px;
+    }
+    
+    .listing-header h1 {
+        margin: 0;
+        color: #333;
+    }
+    
+    .price {
+        font-size: 24px;
+        font-weight: bold;
+        color: #28a745;
+        margin-top: 10px;
+    }
+    
+    .listing-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+    
+    .listing-gallery {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .main-image {
+        height: 400px;
+        overflow: hidden;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .main-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .thumbnail-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
+    }
+    
+    .thumbnail {
+        height: 80px;
+        overflow: hidden;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .thumbnail:hover {
+        transform: scale(1.05);
+    }
+    
+    .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .listing-info {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .specs {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .spec-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+        color: #666;
+    }
+    
+    .spec-item i {
+        color: #007bff;
+    }
+    
+    .amenities {
+        margin-bottom: 30px;
+    }
+    
+    .amenities h3, .description h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #333;
+    }
+    
+    .amenities ul {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+    }
+    
+    .amenities li {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .amenities li i {
+        width: 20px;
+        text-align: center;
+    }
+    
+    .amenities li.unavailable {
+        color: #999;
+    }
+    
+    .amenities li.unavailable i {
+        color: #ccc;
+    }
+    
+    .description {
+        margin-bottom: 30px;
+    }
+    
+    .description p {
+        line-height: 1.6;
+        color: #555;
+    }
+    
+    .contact-section {
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        text-align: center;
+    }
+    
+    .contact-btn {
+        padding: 12px 25px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .contact-btn:hover {
+        background-color: #0069d9;
+    }
+    
+    .contact-btn i {
+        margin-right: 8px;
+    }
+    
+    .contact-note {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+    
+    @media (max-width: 768px) {
+        .listing-content {
+            flex-direction: column;
+        }
+        
+        .main-image {
+            height: 300px;
+        }
+    }
+</style>
+{% endblock %}
