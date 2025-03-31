@@ -400,299 +400,299 @@
         </div>
     </div>
 
+    {% raw %}
     <script>
-
         // Profile JavaScript functions///////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function toggleProfileForm() {
-    const form = document.getElementById('profileForm');
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
-
-function showArchiveForm() {
-    document.getElementById('archiveForm').style.display = 'block';
-}
-
-function confirmRemovePicture() {
-    $('#removePictureModal').modal('show');
-}
-
-function removeProfilePicture() {
-    if (!confirm('Are you sure you want to remove your profile picture?')) {
-        return;
-    }
-
-    fetch("{{ url_for('remove_profile_picture') }}", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert('Error removing picture: ' + data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred');
-    });
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// House listings JavaScript functions
-function toggleHouseForm() {
-    const form = document.getElementById('houseListingForm');
-    if (!form) {
-        console.error('Form not found!');
-        return;
-    }
-    if (form.style.display === 'none') {
-        // Reset form for new listing
-        form.reset();
-        document.getElementById('listing_id').value = '';
-        document.getElementById('deleteBtn').style.display = 'none';
-        document.getElementById('image-preview').innerHTML = '';
-    }
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
-
-async function editListing(listingId) {
-    try {
-        const form = document.getElementById('houseListingForm');
-        form.style.display = 'block';
-
-        // Show loading state while we fetch the data
-        const originalFormContent = form.innerHTML;
-        form.innerHTML = '<div class="loading-spinner">Loading listing details...</div>';
-
-        const response = await fetch(/api/house_listings/${listingId});
-
-        if (!response.ok) {
-            throw new Error(HTTP error! status: ${response.status});
+        function toggleProfileForm() {
+            const form = document.getElementById('profileForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
 
-        const data = await response.json();
-
-        if (!data.success) {
-            throw new Error(data.error || 'Failed to load listing data');
+        function showArchiveForm() {
+            document.getElementById('archiveForm').style.display = 'block';
         }
 
-        // Restore the original form content
-        form.innerHTML = originalFormContent;
+        function confirmRemovePicture() {
+            $('#removePictureModal').modal('show');
+        }
 
-        const listing = data.listing;
-        
-        // Now populate the form fields
-        document.getElementById('listing_id').value = listing._id || '';
-        document.getElementById('rent_per_room_rwf').value = listing.rent_per_room_rwf || '';
-        document.getElementById('location').value = listing.location || '';
-        document.getElementById('num_bedrooms').value = listing.num_bedrooms || '';
-        document.getElementById('num_bathrooms').value = listing.num_bathrooms || '';
-        document.getElementById('description').value = listing.description || '';
-        document.getElementById('status').value = listing.status || 'available';
+        function removeProfilePicture() {
+            if (!confirm('Are you sure you want to remove your profile picture?')) {
+                return;
+            }
 
-        // Set checkboxes
-        document.getElementById('furnished').checked = listing.furnished || false;
-        document.getElementById('electricity_included').checked = listing.electricity_included || false;
-        document.getElementById('security_guard').checked = listing.security_guard || false;
-        document.getElementById('water_included').checked = listing.water_included || false;
-        document.getElementById('wifi_included').checked = listing.wifi_included || false;
-        document.getElementById('washing_machine').checked = listing.washing_machine || false;
-
-        // Handle image previews
-        const imagePreview = document.getElementById('image-preview');
-        imagePreview.innerHTML = '';
-
-        if (listing.images && listing.images.length > 0) {
-            listing.images.forEach(image => {
-                const imgContainer = document.createElement('div');
-                imgContainer.className = 'image-preview-item';
-                imgContainer.innerHTML = `
-                    <img src="/uploads/house_images/${image}" alt="House Image">
-                    <button type="button" class="btn-remove-image" 
-                            onclick="removeImage('${listing._id}', '${image}')"
-                            aria-label="Remove image">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                imagePreview.appendChild(imgContainer);
+            fetch("{{ url_for('remove_profile_picture') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error removing picture: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred');
             });
-        } else {
-            imagePreview.innerHTML = '<p>No images uploaded yet</p>';
         }
 
-        // Show delete button
-        document.getElementById('deleteBtn').style.display = 'inline-block';
-
-        // Scroll to form
-        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-    } catch (error) {
-        console.error('Edit Listing Error:', error);
-        const form = document.getElementById('houseListingForm');
-        form.innerHTML = `
-            <div class="error-message">
-                <p>Failed to load listing details</p>
-                <p><small>${error.message}</small></p>
-                <button onclick="toggleHouseForm()" class="btn btn-secondary">Close</button>
-                <button onclick="editListing('${listingId}')" class="btn btn-primary">Retry</button>
-            </div>
-        `;
-    }
-}
-
-function archiveListing(listingId) {
-    if (confirm('Are you sure you want to archive this listing? It will no longer be visible to others.')) {
-        updateListingStatus(listingId, 'archived');
-    }
-}
-
-function activateListing(listingId) {
-    updateListingStatus(listingId, 'available');
-}
-
-function updateListingStatus(listingId, status) {
-    fetch(/api/house_listings/${listingId}/status, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status: status })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert('Error updating listing: ' + data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while updating the listing');
-    });
-}
-
-function confirmDeleteListing() {
-    $('#deleteListingModal').modal('show');
-}
-
-function deleteListing() {
-    const listingId = document.getElementById('listing_id').value;
-    if (!listingId) {
-        alert('No listing selected for deletion');
-        return;
-    }
-
-    fetch(/api/house_listings/${listingId}, {  // Make sure listingId is in URL
-        method: 'DELETE'
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => { throw new Error(err.error); });
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error deleting listing: ' + error.message);
-    });
-}
-
-function removeImage(listingId, imageName) {
-    if (confirm('Are you sure you want to remove this image?')) {
-        fetch(/api/house_listings/${listingId}/images, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ image_name: imageName })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                editListing(listingId);
-            } else {
-                alert('Error removing image: ' + data.error);
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // House listings JavaScript functions
+        function toggleHouseForm() {
+            const form = document.getElementById('houseListingForm');
+            if (!form) {
+                console.error('Form not found!');
+                return;
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while removing the image');
+            if (form.style.display === 'none') {
+                // Reset form for new listing
+                form.reset();
+                document.getElementById('listing_id').value = '';
+                document.getElementById('deleteBtn').style.display = 'none';
+                document.getElementById('image-preview').innerHTML = '';
+            }
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function editListing(listingId) {
+            try {
+                const form = document.getElementById('houseListingForm');
+                form.style.display = 'block';
+
+                // Show loading state while we fetch the data
+                const originalFormContent = form.innerHTML;
+                form.innerHTML = '<div class="loading-spinner">Loading listing details...</div>';
+
+                const response = await fetch(`/api/house_listings/${listingId}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to load listing data');
+                }
+
+                // Restore the original form content
+                form.innerHTML = originalFormContent;
+
+                const listing = data.listing;
+                
+                // Now populate the form fields
+                document.getElementById('listing_id').value = listing._id || '';
+                document.getElementById('rent_per_room_rwf').value = listing.rent_per_room_rwf || '';
+                document.getElementById('location').value = listing.location || '';
+                document.getElementById('num_bedrooms').value = listing.num_bedrooms || '';
+                document.getElementById('num_bathrooms').value = listing.num_bathrooms || '';
+                document.getElementById('description').value = listing.description || '';
+                document.getElementById('status').value = listing.status || 'available';
+
+                // Set checkboxes
+                document.getElementById('furnished').checked = listing.furnished || false;
+                document.getElementById('electricity_included').checked = listing.electricity_included || false;
+                document.getElementById('security_guard').checked = listing.security_guard || false;
+                document.getElementById('water_included').checked = listing.water_included || false;
+                document.getElementById('wifi_included').checked = listing.wifi_included || false;
+                document.getElementById('washing_machine').checked = listing.washing_machine || false;
+
+                // Handle image previews
+                const imagePreview = document.getElementById('image-preview');
+                imagePreview.innerHTML = '';
+
+                if (listing.images && listing.images.length > 0) {
+                    listing.images.forEach(image => {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'image-preview-item';
+                        imgContainer.innerHTML = `
+                            <img src="/uploads/house_images/${image}" alt="House Image">
+                            <button type="button" class="btn-remove-image" 
+                                    onclick="removeImage('${listing._id}', '${image}')"
+                                    aria-label="Remove image">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        imagePreview.appendChild(imgContainer);
+                    });
+                } else {
+                    imagePreview.innerHTML = '<p>No images uploaded yet</p>';
+                }
+
+                // Show delete button
+                document.getElementById('deleteBtn').style.display = 'inline-block';
+
+                // Scroll to form
+                form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            } catch (error) {
+                console.error('Edit Listing Error:', error);
+                const form = document.getElementById('houseListingForm');
+                form.innerHTML = `
+                    <div class="error-message">
+                        <p>Failed to load listing details</p>
+                        <p><small>${error.message}</small></p>
+                        <button onclick="toggleHouseForm()" class="btn btn-secondary">Close</button>
+                        <button onclick="editListing('${listingId}')" class="btn btn-primary">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        function archiveListing(listingId) {
+            if (confirm('Are you sure you want to archive this listing? It will no longer be visible to others.')) {
+                updateListingStatus(listingId, 'archived');
+            }
+        }
+
+        function activateListing(listingId) {
+            updateListingStatus(listingId, 'available');
+        }
+
+        function updateListingStatus(listingId, status) {
+            fetch(`/api/house_listings/${listingId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error updating listing: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating the listing');
+            });
+        }
+
+        function confirmDeleteListing() {
+            $('#deleteListingModal').modal('show');
+        }
+
+        function deleteListing() {
+            const listingId = document.getElementById('listing_id').value;
+            if (!listingId) {
+                alert('No listing selected for deletion');
+                return;
+            }
+
+            fetch(`/api/house_listings/${listingId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting listing: ' + error.message);
+            });
+        }
+
+        function removeImage(listingId, imageName) {
+            if (confirm('Are you sure you want to remove this image?')) {
+                fetch(`/api/house_listings/${listingId}/images`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image_name: imageName })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        editListing(listingId);
+                    } else {
+                        alert('Error removing image: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while removing the image');
+                });
+            }
+        }
+
+        // Updated Form submission handler for unified endpoint
+        document.getElementById('houseListingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            
+            // Disable button during submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+            
+            const formData = new FormData(form);
+            const listingId = document.getElementById('listing_id').value;
+            
+            // Use the same endpoint for both create and update
+            fetch('/api/house_listings', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to save listing'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving the listing');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            });
         });
-    }
-}
 
-// Updated Form submission handler for unified endpoint
-document.getElementById('houseListingForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const form = this;
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    
-    // Disable button during submission
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Saving...';
-    
-    const formData = new FormData(form);
-    const listingId = document.getElementById('listing_id').value;
-    
-    // Use the same endpoint for both create and update
-    fetch('/api/house_listings', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        } else {
-            alert('Error: ' + (data.error || 'Failed to save listing'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while saving the listing');
-    })
-    .finally(() => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-    });
-});
-
-// Preview images before upload
-document.getElementById('house_images').addEventListener('change', function(e) {
-    const preview = document.getElementById('image-preview');
-    preview.innerHTML = '';
-    
-    const files = e.target.files;
-    for (let i = 0; i < Math.min(files.length, 5); i++) {
-        const file = files[i];
-        if (file.type.match('image.*')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgContainer = document.createElement('div');
-                imgContainer.className = 'image-preview-item';
-                imgContainer.innerHTML = <img src="${e.target.result}" alt="Preview">;
-                preview.appendChild(imgContainer);
+        // Preview images before upload
+        document.getElementById('house_images').addEventListener('change', function(e) {
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+            
+            const files = e.target.files;
+            for (let i = 0; i < Math.min(files.length, 5); i++) {
+                const file = files[i];
+                if (file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'image-preview-item';
+                        imgContainer.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                        preview.appendChild(imgContainer);
+                    }
+                    reader.readAsDataURL(file);
+                }
             }
-            reader.readAsDataURL(file);
-        }
-    }
-});
-
+        });
     </script>
+    {% endraw %}
 
     <style>
         .dashboard {
@@ -1048,6 +1048,5 @@ document.getElementById('house_images').addEventListener('change', function(e) {
             gap: 10px;
             margin-top: 20px;
         }
-
     </style>
 {% endblock %}
