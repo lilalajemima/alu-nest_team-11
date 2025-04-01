@@ -77,7 +77,7 @@
             <div class="contact-section">
                 <button onclick="contactOwner('{{ listing.user_email }}', '{{ listing.location }}')" 
                         class="contact-btn">
-                    <i class="fas fa-envelope"></i> Contact Owner
+                    <i class="fas fa-envelope"></i> Reach Out
                 </button>
                 <p class="contact-note">This will open your email client to send a message to the listing owner.</p>
             </div>
@@ -91,9 +91,18 @@
     }
     
     function contactOwner(email, location) {
-        const subject = Regarding your house listing in ${location};
-        const mailtoLink = mailto:${email}?subject=${encodeURIComponent(subject)};
-        window.location.href = mailtoLink;
+        if (!email) {
+            alert('No contact information available for this listing.');
+            return;
+        }
+
+        try {
+            const subject = `Regarding your house listing in ${location}`;
+            const body = `Hello,\n\nI'm interested in your property at ${location}.\n\nPlease provide more information.`;
+            window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+        } catch (e) {
+            alert('Could not open email client. Please try again later.');
+        }
     }
 </script>
 
@@ -261,7 +270,7 @@
     
     .contact-btn {
         padding: 12px 25px;
-        background-color: #007bff;
+        background-color: #4a6fa5;
         color: white;
         border: none;
         border-radius: 4px;
@@ -271,7 +280,7 @@
     }
     
     .contact-btn:hover {
-        background-color: #0069d9;
+        background-color: #ff6b6b;
     }
     
     .contact-btn i {

@@ -694,7 +694,6 @@ def compare_neighborhoods():
 #########################################################################################################################################################################
 # House Listings Public View Routes
 #########################################################################################################################################################################
-
 @app.route('/listings')
 @login_required
 def view_listings():
@@ -703,29 +702,33 @@ def view_listings():
     
     # Add filters from request args
     location_filter = request.args.get('location')
-    min_price = request.args.get('min_price', type=int)
-    max_price = request.args.get('max_price', type=int)
-    bedrooms = request.args.get('bedrooms', type=int)
-    bathrooms = request.args.get('bathrooms', type=int)
+    min_price = request.args.get('min_price')
+    max_price = request.args.get('max_price')
+    bedrooms = request.args.get('bedrooms')
+    bathrooms = request.args.get('bathrooms')
     amenities = request.args.getlist('amenities')
     
+    # Location filter
     if location_filter:
         query['location'] = {"$regex": location_filter, "$options": "i"}
     
-    if min_price is not None or max_price is not None:
+    # Price filters
+    if min_price or max_price:
         query['rent_per_room_rwf'] = {}
-        if min_price is not None:
-            query['rent_per_room_rwf']['$gte'] = min_price
-        if max_price is not None:
-            query['rent_per_room_rwf']['$lte'] = max_price
+        if min_price:
+            query['rent_per_room_rwf']['$gte'] = int(min_price)
+        if max_price:
+            query['rent_per_room_rwf']['$lte'] = int(max_price)
     
+    # Bedrooms filter
     if bedrooms:
-        query['num_bedrooms'] = bedrooms
+        query['num_bedrooms'] = {'$gte': int(bedrooms)}
     
+    # Bathrooms filter
     if bathrooms:
-        query['num_bathrooms'] = bathrooms
+        query['num_bathrooms'] = {'$gte': int(bathrooms)}
     
-    # Handle amenities filters
+    # Amenities filters - ONLY add to query if amenity is checked
     if amenities:
         for amenity in amenities:
             query[amenity] = True
@@ -747,9 +750,10 @@ def view_listings():
         {"$sort": {"created_at": -1}}
     ]))
     
-    # Convert ObjectId to string for each listing
+    # Convert ObjectId to string and ensure only images field exists
     for listing in listings:
         listing['_id'] = str(listing['_id'])
+        listing.setdefault('images', [])  # Only keep this default
     
     return render_template('listings.html', listings=listings)
 
@@ -757,7 +761,8 @@ def view_listings():
 @login_required
 def view_listing(listing_id):
     try:
-        listing = db.house_listing.aggregate([
+        # Get the listing with user information
+        listing = list(db.house_listing.aggregate([
             {"$match": {"_id": ObjectId(listing_id)}},
             {"$lookup": {
                 "from": "users",
@@ -770,20 +775,27 @@ def view_listing(listing_id):
                 "user_email": "$user.email",
                 "user_name": "$user.name"
             }}
-        ]).next()
+        ]))
         
         if not listing:
             flash('Listing not found', 'error')
             return redirect(url_for('view_listings'))
         
+        listing = listing[0]  # Get the first (and only) result
         listing['_id'] = str(listing['_id'])
+        
+        # Ensure all fields exist
+        listing.setdefault('images', [])
+        listing.setdefault('furnished', False)
+        listing.setdefault('electricity_included', False)
+        listing.setdefault('water_included', False)
+        listing.setdefault('wifi_included', False)
+        listing.setdefault('security_guard', False)
+        
         return render_template('listing_detail.html', listing=listing)
     
-    except StopIteration:
-        flash('Listing not found', 'error')
-        return redirect(url_for('view_listings'))
     except Exception as e:
-        flash('An error occurred', 'error')
+        flash('Error loading listing', 'error')
         return redirect(url_for('view_listings'))
 
 if __name__ == '__main__':

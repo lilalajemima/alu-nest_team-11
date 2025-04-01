@@ -3,168 +3,190 @@
 {% block content %}
 <div class="listings-container">
     <h1>Available House Listings</h1>
-    
+
     <!-- Search and Filter Section -->
     <div class="search-filters">
         <form id="searchForm" method="GET" action="{{ url_for('view_listings') }}">
             <div class="filter-row">
                 <div class="filter-group">
                     <label for="location">Location</label>
-                    <input type="text" id="location" name="location" placeholder="Any location" 
-                           value="{{ request.args.get('location', '') }}">
+                    <input type="text" id="location" name="location" placeholder="Any location"
+                        value="{{ request.args.get('location', '') }}">
                 </div>
-                
+
                 <div class="filter-group">
                     <label for="min_price">Min Price (RWF)</label>
-                    <input type="number" id="min_price" name="min_price" placeholder="Min" 
-                           value="{{ request.args.get('min_price', '') }}">
+                    <input type="number" id="min_price" name="min_price" placeholder="Min"
+                        value="{{ request.args.get('min_price', '') }}">
                 </div>
-                
+
                 <div class="filter-group">
                     <label for="max_price">Max Price (RWF)</label>
-                    <input type="number" id="max_price" name="max_price" placeholder="Max" 
-                           value="{{ request.args.get('max_price', '') }}">
+                    <input type="number" id="max_price" name="max_price" placeholder="Max"
+                        value="{{ request.args.get('max_price', '') }}">
                 </div>
             </div>
-            
+
             <div class="filter-row">
                 <div class="filter-group">
                     <label for="bedrooms">Bedrooms</label>
                     <select id="bedrooms" name="bedrooms">
                         <option value="">Any</option>
-                        <option value="1" {% if request.args.get('bedrooms') == '1' %}selected{% endif %}>1</option>
-                        <option value="2" {% if request.args.get('bedrooms') == '2' %}selected{% endif %}>2</option>
-                        <option value="3" {% if request.args.get('bedrooms') == '3' %}selected{% endif %}>3+</option>
+                        <option value="1" {% if request.args.get('bedrooms')=='1' %}selected{% endif %}>1</option>
+                        <option value="2" {% if request.args.get('bedrooms')=='2' %}selected{% endif %}>2</option>
+                        <option value="3" {% if request.args.get('bedrooms')=='3' %}selected{% endif %}>3+</option>
                     </select>
                 </div>
-                
+
                 <div class="filter-group">
                     <label for="bathrooms">Bathrooms</label>
                     <select id="bathrooms" name="bathrooms">
                         <option value="">Any</option>
-                        <option value="1" {% if request.args.get('bathrooms') == '1' %}selected{% endif %}>1</option>
-                        <option value="2" {% if request.args.get('bathrooms') == '2' %}selected{% endif %}>2</option>
-                        <option value="3" {% if request.args.get('bathrooms') == '3' %}selected{% endif %}>3+</option>
+                        <option value="1" {% if request.args.get('bathrooms')=='1' %}selected{% endif %}>1</option>
+                        <option value="2" {% if request.args.get('bathrooms')=='2' %}selected{% endif %}>2</option>
+                        <option value="3" {% if request.args.get('bathrooms')=='3' %}selected{% endif %}>3+</option>
                     </select>
                 </div>
-                
+
                 <div class="filter-group amenities">
                     <label>Amenities</label>
                     <div class="amenities-checkboxes">
                         <div>
-                            <input type="checkbox" id="furnished" name="amenities" value="furnished" 
-                                  {% if 'furnished' in request.args.getlist('amenities') %}checked{% endif %}>
+                            <input type="checkbox" id="furnished" name="amenities" value="furnished" {% if 'furnished'
+                                in request.args.getlist('amenities') %}checked{% endif %}>
                             <label for="furnished">Furnished</label>
                         </div>
                         <div>
-                            <input type="checkbox" id="electricity" name="amenities" value="electricity_included" 
-                                  {% if 'electricity_included' in request.args.getlist('amenities') %}checked{% endif %}>
+                            <input type="checkbox" id="electricity" name="amenities" value="electricity_included" {%
+                                if 'electricity_included' in request.args.getlist('amenities') %}checked{% endif %}>
                             <label for="electricity">Electricity</label>
                         </div>
                         <div>
-                            <input type="checkbox" id="water" name="amenities" value="water_included" 
-                                  {% if 'water_included' in request.args.getlist('amenities') %}checked{% endif %}>
+                            <input type="checkbox" id="water" name="amenities" value="water_included" {%
+                                if 'water_included' in request.args.getlist('amenities') %}checked{% endif %}>
                             <label for="water">Water</label>
                         </div>
                         <div>
-                            <input type="checkbox" id="wifi" name="amenities" value="wifi_included" 
-                                  {% if 'wifi_included' in request.args.getlist('amenities') %}checked{% endif %}>
+                            <input type="checkbox" id="wifi" name="amenities" value="wifi_included" {%
+                                if 'wifi_included' in request.args.getlist('amenities') %}checked{% endif %}>
                             <label for="wifi">WiFi</label>
                         </div>
                         <div>
-                            <input type="checkbox" id="security" name="amenities" value="security_guard" 
-                                  {% if 'security_guard' in request.args.getlist('amenities') %}checked{% endif %}>
+                            <input type="checkbox" id="security" name="amenities" value="security_guard" {%
+                                if 'security_guard' in request.args.getlist('amenities') %}checked{% endif %}>
                             <label for="security">Security</label>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="filter-actions">
                 <button type="submit" class="search-btn">Search</button>
                 <button type="button" class="reset-btn" onclick="resetFilters()">Reset</button>
             </div>
         </form>
     </div>
-    
+
     <!-- Listings Grid -->
     <div class="listings-grid">
         {% if listings %}
-            {% for listing in listings %}
-            <div class="listing-card">
-                <div class="listing-image">
-                    {% if listing.images and listing.images|length > 0 %}
-                    <img src="{{ url_for('static', filename='uploads/house_images/' + listing.images[0]) }}" 
-                         alt="House Image" onerror="this.src='{{ url_for('static', filename='images/house_placeholder.jpg') }}'">
-                    {% else %}
-                    <img src="{{ url_for('static', filename='images/house_placeholder.jpg') }}" alt="House Image">
-                    {% endif %}
+        {% for listing in listings %}
+        <div class="listing-card">
+            <div class="listing-image">
+                {% if listing.images and listing.images|length > 0 %}
+                <img src="{{ url_for('static', filename='uploads/house_images/' + listing.images[0]) }}"
+                    alt="House Image"
+                    onerror="this.src='{{ url_for('static', filename='images/house_placeholder.jpg') }}'">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/house_placeholder.jpg') }}" alt="House Image">
+                {% endif %}
+            </div>
+
+            <div class="listing-details">
+                <h3>{{ listing.location }}</h3>
+                <div class="price">{{ "{:,}".format(listing.rent_per_room_rwf) }} RWF per room</div>
+
+                <div class="specs">
+                    <span><i class="fas fa-bed"></i> {{ listing.num_bedrooms }} bed</span>
+                    <span><i class="fas fa-bath"></i> {{ listing.num_bathrooms }} bath</span>
                 </div>
-                
-                <div class="listing-details">
-                    <h3>{{ listing.location }}</h3>
-                    <div class="price">{{ "{:,}".format(listing.rent_per_room_rwf) }} RWF per room</div>
-                    
-                    <div class="specs">
-                        <span><i class="fas fa-bed"></i> {{ listing.num_bedrooms }} bed</span>
-                        <span><i class="fas fa-bath"></i> {{ listing.num_bathrooms }} bath</span>
-                    </div>
-                    
-                    <div class="amenities">
-                        {% if listing.furnished %}<span><i class="fas fa-couch"></i> Furnished</span>{% endif %}
-                        {% if listing.electricity_included %}<span><i class="fas fa-bolt"></i> Electricity</span>{% endif %}
-                        {% if listing.water_included %}<span><i class="fas fa-tint"></i> Water</span>{% endif %}
-                        {% if listing.wifi_included %}<span><i class="fas fa-wifi"></i> WiFi</span>{% endif %}
-                        {% if listing.security_guard %}<span><i class="fas fa-shield-alt"></i> Security</span>{% endif %}
-                    </div>
-                    
-                    <div class="description">
-                        {{ listing.description|truncate(150) }}
-                    </div>
-                    
-                    <div class="listing-actions">
-                        <a href="{{ url_for('view_listing', listing_id=listing._id) }}" class="view-btn">View Details</a>
-                        <button onclick="contactOwner('{{ listing.user_email }}', '{{ listing.location }}')" class="contact-btn">
-                            Reach Out 
-                        </button>
-                    </div>
+
+                <div class="amenities">
+                    {% if listing.get('furnished') %}<span><i class="fas fa-couch"></i> Furnished</span>{% endif %}
+                    {% if listing.get('electricity_included') %}<span><i class="fas fa-bolt"></i> Electricity</span>{% endif %}
+                    {% if listing.get('water_included') %}<span><i class="fas fa-tint"></i> Water</span>{% endif %}
+                    {% if listing.get('wifi_included') %}<span><i class="fas fa-wifi"></i> WiFi</span>{% endif %}
+                    {% if listing.get('security_guard') %}<span><i class="fas fa-shield-alt"></i> Security</span>{% endif %}
+                </div>
+
+                <div class="description">
+                    {{ listing.description|truncate(150) }}
+                </div>
+
+                <div class="listing-actions">
+                    <a href="{{ url_for('view_listing', listing_id=listing._id) }}" class="view-btn">View Details</a>
+                    <button onclick="contactOwner('{{ listing.user_email }}', '{{ listing.location }}')"
+                        class="contact-btn">
+                        Reach Out
+                    </button>
                 </div>
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
         {% else %}
-            <div class="no-listings">
-                <p>No listings found matching your criteria.</p>
-                <button onclick="resetFilters()" class="reset-btn">Reset Filters</button>
-            </div>
+        <div class="no-listings">
+            <p>No listings found matching your criteria.</p>
+            <button onclick="resetFilters()" class="reset-btn">Reset Filters</button>
+        </div>
         {% endif %}
     </div>
 </div>
 
 <script>
     function contactOwner(email, location) {
-        const subject = Regarding your house listing in ${location};
-        const mailtoLink = mailto:${email}?subject=${encodeURIComponent(subject)};
-        window.location.href = mailtoLink;
+        if (!email) {
+            alert('No contact information available for this listing.');
+            return;
+        }
+
+        try {
+            const subject = `Regarding your house listing in ${location}`;
+            const body = `Hello,\n\nI'm interested in your listing at ${location}.\n\nPlease provide more information.`;
+            window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+        } catch (e) {
+            alert('Could not open email client. Please try again later.');
+        }
     }
-    
+
     function resetFilters() {
-        document.getElementById('searchForm').reset();
+        // Reset all form fields
+        document.getElementById('location').value = '';
+        document.getElementById('min_price').value = '';
+        document.getElementById('max_price').value = '';
+        document.getElementById('bedrooms').value = '';
+        document.getElementById('bathrooms').value = '';
+
+        // Uncheck all checkboxes
+        document.querySelectorAll('.amenities-checkboxes input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // Submit the form to reload with no filters
         window.location.href = "{{ url_for('view_listings') }}";
     }
-    
-    // Auto-submit form when select elements change
-    document.getElementById('bedrooms').addEventListener('change', function() {
-        document.getElementById('searchForm').submit();
+
+    // Auto-submit handlers
+    document.getElementById('bedrooms').addEventListener('change', function () {
+        this.form.submit();
     });
-    
-    document.getElementById('bathrooms').addEventListener('change', function() {
-        document.getElementById('searchForm').submit();
+
+    document.getElementById('bathrooms').addEventListener('change', function () {
+        this.form.submit();
     });
-    
-    // Auto-submit form when checkbox changes
-    document.querySelectorAll('.amenities-checkboxes input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            document.getElementById('searchForm').submit();
+
+    document.querySelectorAll('.amenities-checkboxes input').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            this.form.submit();
         });
     });
 </script>
@@ -175,7 +197,7 @@
         margin: 0 auto;
         padding: 20px;
     }
-    
+
     .search-filters {
         background: #f8f9fa;
         padding: 20px;
@@ -183,26 +205,26 @@
         margin-bottom: 30px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
+
     .filter-row {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
         margin-bottom: 15px;
     }
-    
+
     .filter-group {
         flex: 1;
         min-width: 200px;
     }
-    
+
     .filter-group label {
         display: block;
         margin-bottom: 5px;
         font-weight: 600;
         color: #333;
     }
-    
+
     .filter-group input,
     .filter-group select {
         width: 100%;
@@ -211,30 +233,31 @@
         border-radius: 4px;
         font-size: 16px;
     }
-    
+
     .amenities-checkboxes {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 10px;
     }
-    
+
     .amenities-checkboxes div {
         display: flex;
         align-items: center;
     }
-    
+
     .amenities-checkboxes input {
         width: auto;
         margin-right: 8px;
     }
-    
+
     .filter-actions {
         display: flex;
         gap: 10px;
         margin-top: 15px;
     }
-    
-    .search-btn, .reset-btn {
+
+    .search-btn,
+    .reset-btn {
         padding: 10px 20px;
         border: none;
         border-radius: 4px;
@@ -242,31 +265,31 @@
         font-size: 16px;
         transition: all 0.3s ease;
     }
-    
+
     .search-btn {
         background-color: #007bff;
         color: white;
     }
-    
+
     .search-btn:hover {
         background-color: #0069d9;
     }
-    
+
     .reset-btn {
         background-color: #6c757d;
         color: white;
     }
-    
+
     .reset-btn:hover {
         background-color: #5a6268;
     }
-    
+
     .listings-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 25px;
     }
-    
+
     .listing-card {
         background: white;
         border-radius: 8px;
@@ -274,62 +297,62 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
     }
-    
+
     .listing-card:hover {
         transform: translateY(-5px);
     }
-    
+
     .listing-image {
         height: 200px;
         overflow: hidden;
     }
-    
+
     .listing-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: transform 0.3s ease;
     }
-    
+
     .listing-card:hover .listing-image img {
         transform: scale(1.05);
     }
-    
+
     .listing-details {
         padding: 20px;
     }
-    
+
     .listing-details h3 {
         margin: 0 0 10px;
         color: #333;
     }
-    
+
     .price {
         font-size: 18px;
         font-weight: bold;
         color: #007bff;
         margin-bottom: 15px;
     }
-    
+
     .specs {
         display: flex;
         gap: 15px;
         margin-bottom: 15px;
         color: #666;
     }
-    
+
     .specs i {
         margin-right: 5px;
         color: #007bff;
     }
-    
+
     .amenities {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
         margin-bottom: 15px;
     }
-    
+
     .amenities span {
         background: #f0f8ff;
         padding: 5px 10px;
@@ -337,23 +360,24 @@
         font-size: 14px;
         color: #007bff;
     }
-    
+
     .amenities i {
         margin-right: 5px;
     }
-    
+
     .description {
         color: #666;
         margin-bottom: 20px;
         line-height: 1.5;
     }
-    
+
     .listing-actions {
         display: flex;
         gap: 10px;
     }
-    
-    .view-btn, .contact-btn {
+
+    .view-btn,
+    .contact-btn {
         padding: 10px 15px;
         border: none;
         border-radius: 4px;
@@ -363,48 +387,48 @@
         text-align: center;
         flex: 1;
     }
-    
+
     .view-btn {
         background-color: #f8f9fa;
         color: #333;
         border: 1px solid #ddd;
     }
-    
+
     .view-btn:hover {
         background-color: #e2e6ea;
     }
-    
+
     .contact-btn {
-        background-color: #28a745;
+        background-color: #4a6fa5;
         color: white;
     }
-    
+
     .contact-btn:hover {
-        background-color: #218838;
+        background-color: #ff6b6b;
     }
-    
+
     .no-listings {
         text-align: center;
         padding: 50px;
         grid-column: 1 / -1;
     }
-    
+
     .no-listings p {
         font-size: 18px;
         color: #666;
         margin-bottom: 20px;
     }
-    
+
     @media (max-width: 768px) {
         .listings-grid {
             grid-template-columns: 1fr;
         }
-        
+
         .filter-row {
             flex-direction: column;
             gap: 15px;
         }
-        
+
         .filter-group {
             min-width: 100%;
         }
